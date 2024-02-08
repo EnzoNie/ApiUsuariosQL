@@ -24,6 +24,27 @@ namespace ApiUsuarioSql.Controllers
             return Ok(usuario);
         }
 
+        [HttpGet]
+        [Route(template: "usuariosTarefas/{id}")]
+        public async Task<UsuarioTarefasRespostaModel> BuscarUsuarioTarefas([FromServices] AppDbContext context, int id)
+        {
+            var usuarioTarefa = await context.Usuarios.AsNoTracking().FirstOrDefaultAsync(usuario => usuario.Id == id);
+            var tarefasUsuario = await context.ListaTarefas.AsNoTracking().Where(tarefa => tarefa.UsuarioId == id).ToListAsync();
+
+            if(usuarioTarefa is null)
+            {
+                return null;
+            }
+            var tarefaUsuario = new UsuarioTarefasRespostaModel
+            {
+                Nome = usuarioTarefa.Nome,
+                Tarefas = tarefasUsuario,
+            };
+
+            return tarefaUsuario;
+            
+        }
+
         [HttpPost(template: "usuarios")]
         public async Task<IActionResult> CriarUsuario([FromServices] AppDbContext context, [FromBody] CriarUsuarioViewModel usuarioModel)
         {

@@ -7,5 +7,6 @@
         public string Senha { get; set; }
         public string Email { get; set; }
         public int Idade { get; set; }
+        //public ICollection<ListaTarefas> Tarefas { get; set; }
     }
 }
